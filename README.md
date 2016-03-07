@@ -11,7 +11,7 @@ This includes some of my thoughts, notes, and personal explanations.
 
 Not finished. Some of these solutions I'm unsure of :)
 
-Also, the formatting may be off, as I've done this really fast between train stations and airports.
+Also, the formatting may be off, as I've done this at various times and settings.
 
 I'll be fixing it all in due time.
 

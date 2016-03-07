@@ -7,7 +7,7 @@ Source material: [https://wiki.haskell.org/Typeclassopedia](https://wiki.haskell
 
 # FUNCTORS
 
-A computational context to which a function can be applied
+A context to which a function can be applied.
 
 ### Exercises
 

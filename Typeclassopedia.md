@@ -42,7 +42,7 @@ Answer:
 
 A type constructor `f a` is a Functor if there's no restriction to any `a`. So it's enough to apply a restriction to a type constructor parameter in order to nullify it's behaviour as a proper Functor.
 
-		:set -XExistentialQuantification
+		{-# LANGUAGE ExistentialQuantification #-}
 		data OrderedList a = (Ord a) => OrderedList [a]
 
 - Is this statement true or false? "The composition of two `Functor`s is also a `Functor`".
@@ -56,7 +56,7 @@ So for a composed functor F (G a), we'll be able to say
 		instance Functor (F (G a)) where
 		    fmap h x = fmap (fmap h) x
 
-Since the parenthesised fmap lifts h to `G` space, the second fmap will lift `(fmap h)` to `F` space.
+Since the parenthesised fmap lifts `h` to `G` space, the second fmap will lift `(fmap h)` to `F` space.
 
 ## Laws
 
@@ -187,7 +187,7 @@ Like `Applicative`, it denotes an "effectful" context. The power of Monad is the
 
 ### Exercises
 
-- Implement a Monad instance for the list constructor, []. Follow the types!
+- Implement a Monad instance for the list constructor, `[]`. Follow the types!
 
 		class Applicative m => Monad m where
 		    return :: a -> m a
@@ -203,7 +203,7 @@ Answer:
 		    --(>>=) :: [a] -> (a -> [b]) -> [b] (*)
 		    xs >>= f = [y | x <- xs, y <- f x]
 
-`(*)`: The signature of bind for [] means that the function will, for each item, need to return a series of computations. Our return type for bind however is [a] so we must flatten the result. This is what `join` means for the monadic [], so `join [[a]] = [a]`, without any data loss.
+`(*)`: The signature of bind for `[]` means that the function will, for each item, need to return a series of computations. Our return type for bind however is `[a]` so we must flatten the result. This is what `join` means for the monadic `[]`, so `join [[a]] = [a]`, without any data loss.
 
 - Implement a Monad instance for `((->) e)`.
 
@@ -247,19 +247,14 @@ We look at the type of each function
 		fmap   :: (a -> b) -> f a -> f b
 		join   :: m (m a) -> m a
 
-`fmap` looks a lot like the type signagure of `(>>=)`, except it's reversed, but we can do
+If `x :: m a`, and `h :: a -> m b`, then
 
-		flip fmap :: f a -> (a -> b) -> f b
+		fmap h x :: m a -> (a -> m b) -> m (m b)
 
-Now if the signature of `(>>=)` says that we must have as a second argument `(a -> m b)`,
-then we have that
-
-		flip fmap :: f a -> (a -> f b) -> f b
-
-Then we can say that
+So by using the `join` operator we can have that
 
 		(>>=) :: (Monad m) => m a -> (a -> m b) -> m b
-		(>>=) x h = (join . flip) fmap h x
+		(>>=) x h = join (fmap h x)
 
 - Now implement `join` and `fmap` (`liftM`) in terms of `(>>=)` and `return`.
 

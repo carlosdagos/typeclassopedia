@@ -51,7 +51,7 @@ Answer: **True**.
 
 If `F` is a Functor and `G` is a Functor, they have their own `fmap` implementation.
 
-So for a composed functor F (G a), we'll be able to say
+So for a composed functor `F (G a)`, we'll be able to say
 
 		instance Functor (F (G a)) where
 		    fmap h x = fmap (fmap h) x
@@ -176,18 +176,17 @@ Answer:
 		    pure x = ZipList [x,x..]
 		    (ZipList gs) <*> (ZipList xs) = ZipList (zipWith ($) gs xs)
 
-The only `pure` function implementation for ZipList that makes sense is that one, since we must be able to `zipWith` all the elements of the list being applied the applicative functor.
+The only `pure` function implementation for `ZipList` that makes sense is that one, since we must be able to `zipWith` all the elements of the list being applied the `Applicative` Functor.
 
-This means that if we create a `pure` ZipList with a single element, our applicative operations will always return 1 element, and since we can't know a priori
-the length of the other ZipLists that will be applied, we create an infinite list of the element and let lazy evaluation take care of the rest.
+This means that if we create a `pure` `ZipList` with a single element, our `Applicative` operations will always return 1 element, and since we can't know a priori the length of the other `ZipList`s that will be applied, we create an infinite list of the element and let lazy evaluation take care of the rest.
 
 # MONADS
 
-Like `Applicative`, it denotes an "effectful" context. The power of Monad is the fact that we can apply functions to it that are not contextual, but rather are intended to "peek" inside the context, and return (lift -- or fmap) a comptued value in the same context.
+Like `Applicative`, it denotes an "effectful" context. The power of `Monad` is the fact that we can apply functions to it that are not contextual, but rather are intended to "peek" inside the context, and return (`lift` -- or `fmap`) a comptued value in the same context.
 
 ### Exercises
 
-- Implement a Monad instance for the list constructor, `[]`. Follow the types!
+- Implement a `Monad` instance for the list constructor, `[]`. Follow the types!
 
 		class Applicative m => Monad m where
 		    return :: a -> m a
@@ -228,11 +227,11 @@ _Assume f has a Functor instance_
 
 ### Intuition
 
-While Applicatives provide us the possibility to operate on a series of computations, these are always restricted. That is, in `u <*> v <*> w`, `u` must be an idiom of two parameters, and then our computations are done. Furthermore, there's no way to use the output of `u <*> v` when applying to `w`, rather `w` is simply applied the previous computation.
+While `Applicative` provide us the possibility to operate on a series of computations, these are always restricted. That is, in `u <*> v <*> w`, `u` must be an idiom of two parameters, and then our computations are done. Furthermore, there's no way to use the output of `u <*> v` when applying to `w`, rather `w` is simply applied the previous computation.
 
-In Monads, we can create a sequence of computations of arbitrary length, allowing the next computation to interact with the result of the previous one, and furthermore, like Applicatives, keep the end result within a context (like IO, Maybe, [], so on).
+In Monads, we can create a sequence of computations of arbitrary length, allowing the next computation to interact with the result of the previous one, and furthermore, like `Applicative`, keep the end result within a context (like `IO`, `Maybe`, `[]`, so on).
 
-Another explanation is that the computational structure of an Applicative result is fixed, whereas the computational structure of Monadic result can vary depending on the output of the previous computation.
+Another explanation is that the computational structure of an `Applicative` result is fixed, whereas the computational structure of a `Monad` result can vary depending on the output of the previous computation.
 
 ### Exercises
 
@@ -278,7 +277,7 @@ Or for the fish operator `(>=>)`
 
 ### Exercises
 
-- Given the definition `g >=> h = \x -> g x >>= h`, prove the equivalence of the above laws and the usual monad laws.
+- Given the definition `g >=> h = \x -> g x >>= h`, prove the equivalence of the above laws and the usual `Monad` laws.
 
 Answer:
 
@@ -320,7 +319,7 @@ The kind of a Monad `m` is `(* -> *) -> *`.
 
 ## Composing Monads
 
-The composition of Monads is not always a Monad. Reminder: Applicatives are closed under composition.
+The composition of `Monad`s is not always a `Monad`. Reminder: `Applicative`s are closed under composition.
 
 ### Exercises
 
@@ -376,8 +375,7 @@ Answer:
 		foldMap . ..(n-1).. . foldMap :: (Foldable t, ..(n-1).., Foldable n, Monoid m) =>
 		           (a -> m) -> (t (..(tn a)..)) -> m
 
-By looking at the types `foldMap` allows a function of type `(a -> m)` to operate on a `t a`, that is,
-`foldMap` allows the user to operate on a structure's data type without modifying the actual structure.
+By looking at the types `foldMap` allows a function of type `(a -> m)` to operate on a `t a`, that is, `foldMap` allows the user to operate on a structure's data type without modifying the actual structure.
 
 Ok so here's the actual, proper explanation of what I just tried to say
 
@@ -398,7 +396,7 @@ returns `Sum 1` always. `Sum` is the Monoid with `mappend (Sum x) (Sum y) = Sum 
 		filterF :: Foldable f => (a -> Bool) -> f a -> [a]
 		filterF p = foldMap (\a -> if p a then [a] else [])
 
-Here the Monoid is `[]`, and `mappend` flattens the list of lists into a list of `a`.
+Here the `Monoid` is `[]`, and `mappend` flattens the list of lists into a list of `a`.
 
 ### Exercises
 
@@ -421,13 +419,13 @@ Here the Monoid is `[]`, and `mappend` flattens the list of lists into a list of
 		and = all (==True) -- We can treat (True, False, &&) as a Monoid with the Identity = True
 		                   -- so when evaluating "and []" the result is "True"
 
-In fact, in Haskell this is the Monoid [`All`](https://hackage.haskell.org/package/base-4.8.2.0/docs/src/Data.Monoid.html#All).
+In fact, in Haskell this is the `Monoid` [`All`](https://hackage.haskell.org/package/base-4.8.2.0/docs/src/Data.Monoid.html#All).
 
 		or :: Foldable t => t Bool -> Bool
 		or = any (==True)  -- Again, (True, False, ||) as a Monoid with Identity = False
 		                   -- So when evaluating "or []" the result is "False"
 
-This is the Monoid [`Any`](https://hackage.haskell.org/package/base-4.8.2.0/docs/src/Data.Monoid.html#Any).
+This is the `Monoid` [`Any`](https://hackage.haskell.org/package/base-4.8.2.0/docs/src/Data.Monoid.html#Any).
 
 		any :: Foldable t => (a -> Bool) -> t a -> Bool
 		any p = getAny . foldMap (Any . p)
@@ -441,15 +439,42 @@ This is the Monoid [`Any`](https://hackage.haskell.org/package/base-4.8.2.0/docs
 		product :: (Num a, Foldable t) => t a => a
 		product = getProduct . foldMap Product
 
-		maximum :: (Ord a, Foldable t) => t a -> a
-		maximum = # TODO
+For `maximum` and `minimum`, I'll take the liberty of changing the type signatures to be a total function, rather than one that can throw an error for empty structures.
 
-		minimum = (Ord a, Foldable t) => t a -> a
-		minimum = # TODO
+We need to find a couple of `Monoid` that will satisfy the laws. You can find these monoids in the [`files/`](files/) folder [here](files/maximum_minimum.hs).
+
+		maximum :: (Ord a, Foldable t) => t a -> Maybe a
+		maximum = getMaximum . foldMap (Maximum . Just)
+
+		minimum = (Ord a, Foldable t) => t a -> Maybe a
+		minimum = getMinimum . foldMap (Minimum . Just)
+
+_Note: These monoids already exist in `Data.Monoid`, they are [`Max`](http://hackage.haskell.org/package/base-4.8.2.0/docs/src/Data.Foldable.html#Max) and [`Min`](http://hackage.haskell.org/package/base-4.8.2.0/docs/src/Data.Foldable.html#Min)_
+
+For `maximumBy` and `minimumBy` we don't require these last Monoids, since [`Ordering` is already a `Monoid` instance](http://hackage.haskell.org/package/base-4.8.2.0/docs/src/GHC.Base.html#line-289).
+
+		maximumBy :: Foldable t => (a -> a -> Ordering) -> t a -> a
+		maximumBy p =
+
+		minimumBy :: Foldable t => (a -> a -> Ordering) -> t a -> a
+		maximumBy p = # TODO
+
+The rest of the functions:
+
+		elem :: (Eq a, Foldable t) => a -> t a -> Bool
+		elem x = any (x==)
+
+		notElem :: (Eq a, Foldable t) => a -> t a -> Bool
+		notElem x = not . elem x
+
+This one is a little tricky. We can't use `foldMap` outright, as it demands a `Monoid` instance, and `Bool` is not a `Monoid`. The `Any` or `All` monoids won't do us any good, since they resolve to `Bool`, and `find` is looking to resolve to `Maybe a`. For this I typed a `Monoid` called `Found`, in the [`files/`](files/) folder [here](files/found_monoid.hs).
+
+		find :: Foldable t => (a -> Bool) -> t a -> Maybe a
+		find p = getFound . foldMap (\x -> if p x then Found (Just x) else Found Nothing)
+
+_And I just found out you can use the [`First` Monoid](http://hackage.haskell.org/package/base-4.8.2.0/docs/src/Data.Monoid.html#First)_
 
 # TRAVERSABLE
-
-
 
 		class (Functor t, Foldable t) => Traversable t where
 		    traverse  :: Applicative f => (a -> f b) -> t a -> f (t b)
@@ -491,7 +516,7 @@ Turns into
 		  |    |     |    |
 		  2    4     3    5  ]
 
-And the 6 is then disregarded.
+And the `6` is then disregarded.
 
 - Give a natural way to turn a list of trees into a tree of lists.
 
@@ -513,9 +538,9 @@ This function will work, for example, like so:
 		     :: (Applicative f, Traversable t, Traversable t1) =>
 		        (a -> f b) -> t (t1 a) -> f (t (t1 b))
 
-`traverse` turns a `Traversable` into an `Applicative Functor`, this means that it allows the execution of side-effects within the structure, and returns a structure with the result of those side-effects.
+`traverse` turns a `Traversable` into an `Applicative` Functor, this means that it allows the execution of side-effects within the structure, and returns a structure with the result of those side-effects.
 
-`traverse . traverse` will then allow to run side-effects into nested Traversable structures.
+`traverse . traverse` will then allow to run side-effects into nested `Traversable` structures.
 
 ## Laws
 

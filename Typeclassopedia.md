@@ -449,7 +449,7 @@ We need to find a couple of `Monoid` that will satisfy the laws. You can find th
 		minimum = (Ord a, Foldable t) => t a -> Maybe a
 		minimum = getMinimum . foldMap (Minimum . Just)
 
-_Note: These monoids already exist in `Data.Monoid`, they are [`Max`](http://hackage.haskell.org/package/base-4.8.2.0/docs/src/Data.Foldable.html#Max) and [`Min`](http://hackage.haskell.org/package/base-4.8.2.0/docs/src/Data.Foldable.html#Min)_
+_Note: These monoids already exist in `Data.Foldable`, they are [`Max`](http://hackage.haskell.org/package/base-4.8.2.0/docs/src/Data.Foldable.html#Max) and [`Min`](http://hackage.haskell.org/package/base-4.8.2.0/docs/src/Data.Foldable.html#Min)_
 
 For `maximumBy` and `minimumBy` we don't require these last Monoids, since [`Ordering` is already a `Monoid` instance](http://hackage.haskell.org/package/base-4.8.2.0/docs/src/GHC.Base.html#line-289).
 

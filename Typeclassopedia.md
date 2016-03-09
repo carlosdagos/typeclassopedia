@@ -65,7 +65,7 @@ Since the parenthesised fmap lifts `h` to `G` space, the second fmap will lift `
 
 ### Exercises
 
-- Although it is not possible for a Functor instance to satisfy the first Functor law but not the second (excluding undefined), the reverse is possible. Give an example of a (bogus) Functor instance which satisfies the second law but not the first.
+- Although it is not possible for a Functor instance to satisfy the first Functor law but not the second (excluding `undefined`), the reverse is possible. Give an example of a (bogus) Functor instance which satisfies the second law but not the first.
 
 Answer:
 
@@ -84,7 +84,7 @@ So we have
 		                           = fmap h (Bogus 1 (g "a"))
 		                           = Bogus 1 (h (g "a"))               -- By definition
 
-So we know it obeys the second law. However
+So we know it obeys the second `Functor` law. However
 
 		fmap id (Bogus 2 "a") = Bogus 1 (id "a") = Bogus 1 "a"
 
@@ -121,7 +121,7 @@ The second law is also violated
 
 # APPLICATIVES
 
-Effectful computations within a context. They are "idioms" for a speficic domain.
+Effectful computations within a context. They are "idioms" for a specific domain.
 
 Can also be thought about as a **fixed-length computation** in a certain context.
 
@@ -298,6 +298,8 @@ Answer:
 		m >>= (\x -> k x >>= h) = (g >=> h) >=> k          -- by definition
 
 # MONAD TRANSFORMERS
+
+#TODO -- Better explanation and intuition
 
 ## Definition
 

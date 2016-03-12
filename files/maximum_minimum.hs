@@ -35,8 +35,8 @@ instance Ord a => Monoid (Minimum a) where
 -- Futhermore, I feel like I just unwrapped a data type and wrapped it again
 -- so perhaps we can optimize with
 --
--- n(Minimum x) `mappend` m(Minimum y) | ... = n
---                                     | ... = m
+-- n@(Minimum x) `mappend` m@(Minimum y) | ... = n
+--                                       | ... = m
 
 
 -- The functions then are

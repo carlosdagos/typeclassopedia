@@ -456,10 +456,16 @@ _Note: These monoids already exist in `Data.Foldable`, they are [`Max`](http://h
 For `maximumBy` and `minimumBy` we don't require these last Monoids, since [`Ordering` is already a `Monoid` instance](http://hackage.haskell.org/package/base-4.8.2.0/docs/src/GHC.Base.html#line-289).
 
 		maximumBy :: Foldable t => (a -> a -> Ordering) -> t a -> a
-		maximumBy p =
+		maximumBy p = foldr1 comp'
+		                  where comp' x y = case p x y of
+		                                           GT -> x
+		                                           _  -> y
 
 		minimumBy :: Foldable t => (a -> a -> Ordering) -> t a -> a
-		maximumBy p = # TODO
+		maximumBy p = foldr1 comp'
+		                  where comp' x y = case p x y of
+		                                           LT -> x
+		                                           _  -> y
 
 The rest of the functions:
 

@@ -217,13 +217,13 @@ Answer:
 
 _Assume f has a Functor instance_
 
-		instance Functor (Free f) where
-		    fmap h (Var a)  = Var (h a)
-		    fmap h (Node x) = Node (fmap (fmap h) x)
-
 		instance Monad (Free f) where
-		    return = Var
-		    (>>=) x y = # TODO
+		    return  = Var
+		    x >>= y = 
+
+_Full soltution is in [files/free-monad.hs](files/free-monads.hs)_
+
+_Note: This is the [Free Monad](http://www.haskellforall.com/2012/06/you-could-have-invented-free-monads.html)_
 
 ### Intuition
 
@@ -342,6 +342,8 @@ Proof:
 		x >>= return . distrib                            :: M (M (N (N a)))
 		join $ x >>= return . distrib                     :: M (N (N a))
 		(join $ x >>= return . distrib) >>= return . join :: M (N a)
+
+_Note: You can find the file in [files/composed-monad-join.hs](files/composed-monad-join.hs)_
 
 # MONADFIX
 

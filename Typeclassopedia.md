@@ -291,7 +291,7 @@ instance Monad (Free f) where
     x >>= y = Node (fmap (>>= h) x)
 ```
 
-_Full soltution is in [files/free-monad.hs](files/free-monads.hs)_
+_Full soltution is in [files/free-monad.hs](files/free-monad.hs)_
 
 _Note: This is the [Free Monad](http://www.haskellforall.com/2012/06/you-could-have-invented-free-monads.html)_
 

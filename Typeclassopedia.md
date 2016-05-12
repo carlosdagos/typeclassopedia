@@ -36,10 +36,12 @@ instance Functor Pair where
 
 - Implement a `Functor` instance for the type `ITree`
 
-        data ITree a = Leaf (Int -> a) | Node [ITree a]
-        instance Functor ITree where
-            fmap f (Leaf g)  = Leaf (f . g)
-            fmap f (Node xs) = Node (map f xs)
+```haskell
+data ITree a = Leaf (Int -> a) | Node [ITree a]
+instance Functor ITree where
+    fmap f (Leaf g)  = Leaf (f . g)
+    fmap f (Node xs) = Node (map f xs)
+```
 
 - Give an example of a type of kind `* -> *` which cannot be made an instance
 of `Functor` (without using undefined).
@@ -75,8 +77,10 @@ Since the parenthesised fmap lifts `h` to `G` space, the second fmap will lift
 
 ## Laws
 
-        fmap id = id                       -- Identity
-        fmap (h . g) = (fmap h) . (fmap g) -- Composition
+```haskell
+fmap id = id                       -- Identity
+fmap (h . g) = (fmap h) . (fmap g) -- Composition
+```
 
 ### Exercises
 
@@ -275,7 +279,7 @@ instance Monad ((->) e) where
 
 - Implement `Functor` and `Monad` instances for `Free f`, defined as
 
-``haskell
+```haskell
 data Free f a = Var a | Node (f (Free f a))
 ```
 
@@ -294,9 +298,9 @@ _Note: This is the [Free Monad](http://www.haskellforall.com/2012/06/you-could-h
 ### Intuition
 
 While `Applicative` provide us the possibility to operate on a series of
-computations, these are always restricted. That is, in `u <\*> v <\*> w`, `u`
+computations, these are always restricted. That is, in `u <*> v <*> w`, `u`
 must be an idiom of two parameters, and then our computations are done.
-Furthermore, there's no way to use the output of `u <\*> v` when applying
+Furthermore, there's no way to use the output of `u <*> v` when applying
 to `w`, rather `w` is simply applied the previous computation.
 
 In Monads, we can create a sequence of computations of arbitrary length,
@@ -344,7 +348,7 @@ join x = x >>= id
 
 fmap :: (a -> b) -> f a -> f b
 fmap h x = x >>= (\y -> return (h y))
-``
+```
 
 ## Laws
 

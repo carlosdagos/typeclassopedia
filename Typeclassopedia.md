@@ -776,7 +776,7 @@ instance Monad m => Category (Kleisli m) where
 # ARROW
 
 Represents another abstraction of computation. Reflects both input and
-output, `b \`arr\` c` can be thought of as a computation that takes a `b`
+output, ``b `arr` c`` can be thought of as a computation that takes a `b`
 as input and produces a `c`. An `Arrow` can represent pure and "effectful"
 computations.
 
